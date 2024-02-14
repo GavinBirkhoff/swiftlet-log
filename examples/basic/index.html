@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logger</title>
+</head>
+
+<body>
+  <!-- <script src="../../dist/swiftlet-log.min.js"></script> -->
+  <script type="module">
+    import { Logger } from '../../dist/swiftlet-log.esm.js'
+    // 例子
+    const logger = new Logger({ level: 0, timestamp: true })
+
+    // logger.addLogListener((level, message) => {
+    //   // 你可以在这里添加自定义的日志监听逻辑，比如发送日志到服务器
+    //   console.log(`Log event captured: [${LogLevel[level]}] - ${message}`)
+    // })
+
+    logger.debug('This is an debug message.') // 输出: [INFO]: This is an info message.
+    logger.info('This is an info message.') // 输出: [INFO]: This is an info message.
+    logger.warning('This is a warning message.') // 输出: [WARNING]: This is a warning message.
+    logger.error('This is an error message.') // 输出: [ERROR]: This is an error message.
+    logger.trace('This is an trace message.')
+    logger.fatal('This is an fatal message.')
+
+  </script>
+  <!-- <script src="../../lib/swiftlet-log.min.js"></script> -->
+</body>
+
+</html>
