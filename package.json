@@ -1,6 +1,6 @@
 {
   "name": "swiftlet-log",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Logging utility with different log levels with timestamp options.",
   "main": "./dist/swiftlet-log.cjs.js",
   "module": "./dist/swiftlet-log.esm.js",
@@ -26,6 +26,6 @@
   "devDependencies": {
     "eslint-config-lavy": "1.0.2-Alpha.1",
     "lavy": "1.0.2-Alpha.0",
-    "swiftlet": "1.0.0-Alpha.1"
+    "swiftlet": "1.0.0-Alpha.3"
   }
 }
