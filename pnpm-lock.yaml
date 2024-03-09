@@ -12,8 +12,8 @@ devDependencies:
     specifier: 1.0.2-Alpha.0
     version: 1.0.2-Alpha.0(eslint@7.32.0)(stylelint@14.16.1)
   swiftlet:
-    specifier: 1.0.0-Alpha.3
-    version: 1.0.0-Alpha.3(typescript@5.0.4)
+    specifier: 1.0.0-Alpha.4
+    version: 1.0.0-Alpha.4(typescript@5.0.4)
 
 packages:
 
@@ -3485,8 +3485,8 @@ packages:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
 
-  /swiftlet@1.0.0-Alpha.3(typescript@5.0.4):
-    resolution: {integrity: sha512-J3/1+ylQ2ObrSccoA8anjMR+LATpwf03lHjr5xOLcM48+UMqVAdgaNJ1F3uSb9J/EuFtVT4jUihskpsLBd6Twg==}
+  /swiftlet@1.0.0-Alpha.4(typescript@5.0.4):
+    resolution: {integrity: sha512-lMaiTD980p7+rTxjEXLLCh8+G6/sLOclD5cDvpKuRWfAIphQ5vvBito0LPlMMhRwwc2OMuxhuK6thlwnS3Ke6A==}
     engines: {node: '>=17.0.0'}
     hasBin: true
     dependencies:
