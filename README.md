@@ -47,31 +47,48 @@ Logging utility with different log levels with timestamp options.
    logger.fatal('This is a fatal message.')
    ```
 
-4. **Customization**
+4. **Middleware**
 
-   - Adjust log level:
+   ```typescript
+   import { Logger, LogLevel, LogMiddleware } from 'swiftlet-log'
 
-     ```typescript
-     logger.setLogLevel(LogLevel.INFO)
-     ```
+   const logger = new Logger({ level: LogLevel.DEBUG, timestamp: true })
 
-   - Enable or disable timestamp:
+   const customPrefixMiddleware: LogMiddleware = (ctx, next) => {
+     ctx.message = `[CUSTOM PREFIX] ${ctx.message}`
+     next(ctx.message, ctx.level)
+   }
 
-     ```typescript
-     logger.enableTimestamp()
-     logger.disableTimestamp()
-     ```
+   logger.use(customPrefixMiddleware)
 
-   - Add or remove log listeners:
+   logger.info('This is an info message.') // 输出: [CUSTOM PREFIX] [INFO]: This is an info message.
+   ```
 
-     ```typescript
-     const customListener: LogListener = (level, message) => {
-       // Your custom log listener logic
-     }
+5. **Customization**
 
-     logger.addLogListener(customListener)
-     logger.removeLogListener(customListener)
-     ```
+- Adjust log level:
+
+  ```typescript
+  logger.setLogLevel(LogLevel.INFO)
+  ```
+
+- Enable or disable timestamp:
+
+  ```typescript
+  logger.enableTimestamp()
+  logger.disableTimestamp()
+  ```
+
+- Add or remove log listeners:
+
+  ```typescript
+  const customListener: LogListener = (level, message) => {
+    // Your custom log listener logic
+  }
+
+  logger.addLogListener(customListener)
+  logger.removeLogListener(customListener)
+  ```
 
 ## Log Levels
 

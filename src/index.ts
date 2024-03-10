@@ -1,1 +1,2 @@
-export { default as Logger, LogLevel, LogOptions } from './Logger'
+export { LogLevel, LogOptions, LogMiddleware, LogListener } from './types'
+export { default as Logger } from './Logger'

@@ -1,6 +1,6 @@
 {
   "name": "swiftlet-log",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0",
   "description": "Logging utility with different log levels with timestamp options.",
   "main": "./dist/swiftlet-log.cjs.js",
   "module": "./dist/swiftlet-log.esm.js",
@@ -10,7 +10,8 @@
   "scripts": {
     "build": "swiftlet build",
     "build:rollup": "npx rollup -c",
-    "build:tsc": "tsc"
+    "build:tsc": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "logging",

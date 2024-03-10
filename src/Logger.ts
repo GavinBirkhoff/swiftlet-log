@@ -1,23 +1,10 @@
-export enum LogLevel {
-  DEBUG,
-  INFO,
-  WARNING,
-  ERROR,
-  TRACE,
-  FATAL
-}
-
-export interface LogOptions {
-  level?: LogLevel
-  timestamp?: boolean
-}
-
-type LogListener = (logLevel: LogLevel, message: string) => void
+import { LogLevel, LogListener, LogMiddleware, LogOptions } from './types'
 
 class Logger {
   private logLevel: LogLevel
   private timestampEnabled: boolean
   private logListeners: LogListener[] = []
+  private middleware: LogMiddleware[] = []
 
   constructor(options: LogOptions = {}) {
     this.logLevel = options.level || LogLevel.DEBUG
@@ -28,12 +15,16 @@ class Logger {
     return new Date().toISOString()
   }
 
+  private formatLogMessage(message: string, level: LogLevel): string {
+    const logColor = this.getColor(level)
+    const timestampStr = this.timestampEnabled ? `\x1b[90m[${this.getCurrentTimestamp()}] \x1b[0m` : ''
+    const levelStr = `${logColor}[${LogLevel[level]}]: \x1b[0m`
+    return `${timestampStr}${levelStr}${message}`
+  }
+
   private log(message: string, level: LogLevel): void {
     if (level >= this.logLevel) {
-      const logColor = this.getColor(level)
-      const timestampStr = this.timestampEnabled ? `\x1b[90m[${this.getCurrentTimestamp()}] \x1b[0m` : ''
-      const levelStr = `${logColor}[${LogLevel[level]}]: \x1b[0m`
-      console.log(`${timestampStr}${levelStr}${message}`)
+      console.log(this.formatLogMessage(message, level))
       this.logListeners.forEach((listener) => listener(level, message))
     }
   }
@@ -57,28 +48,58 @@ class Logger {
     }
   }
 
+  private logWithMiddleware(message: string, level: LogLevel): void {
+    let currentIndex = 0
+    const next = (msg = message, lv = level) => {
+      const nextMiddleware = this.middleware[currentIndex++]
+      if (nextMiddleware) {
+        nextMiddleware({ message, level }, next)
+        if (currentIndex < this.middleware.length + 1) {
+          const err = new Error(`${nextMiddleware.name} middleware missing next() call.`)
+          err.name = 'swiftlet-log-middleware'
+          throw err
+        }
+      } else {
+        this.log(msg, lv)
+      }
+    }
+    try {
+      next()
+    } catch (err: any) {
+      if (err.name === 'swiftlet-log-middleware') {
+        console.warn(err.message)
+        return
+      }
+      console.error(err)
+    }
+  }
+
   debug(message: string): void {
-    this.log(message, LogLevel.DEBUG)
+    this.logWithMiddleware(message, LogLevel.DEBUG)
   }
 
   info(message: string): void {
-    this.log(message, LogLevel.INFO)
+    this.logWithMiddleware(message, LogLevel.INFO)
   }
 
   warning(message: string): void {
-    this.log(message, LogLevel.WARNING)
+    this.logWithMiddleware(message, LogLevel.WARNING)
   }
 
   error(message: string): void {
-    this.log(message, LogLevel.ERROR)
+    this.logWithMiddleware(message, LogLevel.ERROR)
   }
 
   trace(message: string): void {
-    this.log(message, LogLevel.TRACE)
+    this.logWithMiddleware(message, LogLevel.TRACE)
   }
 
   fatal(message: string): void {
-    this.log(message, LogLevel.FATAL)
+    this.logWithMiddleware(message, LogLevel.FATAL)
+  }
+
+  use(middleware: LogMiddleware) {
+    this.middleware.push(middleware)
   }
 
   setLogLevel(level: LogLevel): void {
